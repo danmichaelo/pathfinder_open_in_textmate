@@ -43,7 +43,7 @@
 
 - (BOOL)validateMenuItem:(NSMenuItem*)menuItem;
 {
-  return [[[self host] selection:nil browserID:nil] count] > 0;
+  return [[[self host] selection:nil browserID:nil] count] == 1;
 }
 
 - (id)processItems:(NSArray*)items parameter:(id)parameter;
@@ -55,6 +55,7 @@
   NSEnumerator* enumerator = [items objectEnumerator];
   NSString *path;
   id<NTFSItem> item;
+	NSMutableString* output = [NSMutableString string];
 	
   while (item = [enumerator nextObject])
    {
@@ -62,7 +63,7 @@
 		
 		if (path)
      {
-            [[NSWorkspace sharedWorkspace] openFile:path withApplication:@"TextMate"];
+			[output appendString:path];
      }
    }
   
@@ -70,6 +71,7 @@
     // only allowing one file to be worked on at once but it's good enough for
     // the minute, and for me.
   
+  [[NSWorkspace sharedWorkspace] openFile: output withApplication:@"TextMate"];
     
   return nil;
 }
